@@ -8,20 +8,34 @@
 <body>
     <h1>Welcome to My Website</h1>
     <script>
-        // Send visitor data to an external service
-        fetch('https://webhook.site/199d1f75-1a04-45f0-addf-833456ed8129', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
+        // Function to send visitor data to Flask application
+        function trackVisitor() {
+            // Prepare visitor data
+            var visitorData = {
+                ip: '',
+                country: '',
+                city: '',
+                user_agent: navigator.userAgent,
+                visit_time: new Date().toISOString(),
                 referrer: document.referrer,
                 url: window.location.href
+            };
+
+            // Send visitor data to Flask application endpoint on Google Cloud Platform
+            fetch('https://your-flask-app-url/track', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(visitorData)
             })
-        })
-        .then(response => response.json())
-        .then(data => console.log('Success:', data))
-        .catch((error) => console.error('Error:', error));
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Execute trackVisitor function when the page loads
+        trackVisitor();
     </script>
 </body>
 </html>
